@@ -32,27 +32,21 @@ Designed with clean architecture, structured logging, and production‑grade err
 - [🎉 Final Notes](#-final-notes)
 
 
-````markdown
 # 📸 Screenshots
 
-Add your screenshots inside a `/screenshots` folder in the repository.
+### 01 — API Gateway Routes
+![API Gateway Routes](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/01-api-gateway-routes.png)
 
-Suggested screenshots:
-- API Gateway routes  
-- DynamoDB table with items  
-- CloudWatch logs showing structured JSON  
-- Successful POST / GET / DELETE responses in terminal  
+### 02 — DynamoDB Table
+![DynamoDB Table](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/02-dynamodb-table.png)
 
-Example folder structure:
+### 03 — CloudWatch Logs
+![CloudWatch Logs](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/03-cloudwatch-logs.png)
 
-```
-/screenshots/
-    api-gateway-routes.png
-    dynamodb-table.png
-    cloudwatch-logs.png
-    curl-tests.png
-```
-````
+### 04 — cURL Tests (POST → GET All → GET One → DELETE)
+![cURL Tests](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/04-curl-tests.png)
+
+
 ---
 
 # 🏗 Architecture Overview
