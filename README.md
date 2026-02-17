@@ -12,87 +12,111 @@ Designed with clean architecture, structured logging, and production‑grade err
 
 ---
 
+## 📑 Table of Contents
+
+- [📸 Screenshots](#-screenshots)
+- [🏗 Architecture Overview](#-architecture-overview)
+  - [High‑Level Architecture Diagram](#highlevel-architecture-diagram)
+  - [Sequence Diagram (POST → DynamoDB)](#sequence-diagram-post--dynamodb)
+- [🌐 Base URL](#-base-url)
+- [📚 API Documentation](#-api-documentation)
+  - [POST `/`](#-post-)
+  - [GET `/results`](#-get-results)
+  - [GET `/results/{id}`](#-get-resultsid)
+  - [DELETE `/results/{id}`](#-delete-resultsid)
+  - [CORS](#-cors)
+  - [DynamoDB Schema](#-dynamodb-schema)
+  - [Logging Strategy](#-logging-strategy)
+  - [Local Testing](#-local-testing)
+- [🚧 Future Improvements](#-future-improvements)
+- [🎉 Final Notes](#-final-notes)
+
+
+````markdown
 # 📸 Screenshots
 
-> Add your screenshots here once you take them.  
-> Suggested screenshots:
+Add your screenshots inside a `/screenshots` folder in the repository.
+
+Suggested screenshots:
 - API Gateway routes  
 - DynamoDB table with items  
 - CloudWatch logs showing structured JSON  
 - Successful POST / GET / DELETE responses in terminal  
 
-Example placeholder:
+Example folder structure:
 
+```
 /screenshots/
-api-gateway-routes.png
-dynamodb-table.png
-cloudwatch-logs.png
-curl-tests.png
-
+    api-gateway-routes.png
+    dynamodb-table.png
+    cloudwatch-logs.png
+    curl-tests.png
+```
+````
 ---
 
 # 🏗 Architecture Overview
 
-## High-Level Architecture Diagram
+## High‑Level Architecture Diagram
 
-┌──────────────────────────┐
-│      API Gateway         │
-│  (REST Endpoints Layer)  │
-└─────────────┬────────────┘
-│
-┌────────────────────────┼────────────────────────┐
-│                        │                        │
+```
+                ┌──────────────────────────┐
+                │      API Gateway         │
+                │  (REST Endpoints Layer)  │
+                └─────────────┬────────────┘
+                              │
+     ┌────────────────────────┼────────────────────────┐
+     │                        │                        │
 ┌──────────┐           ┌──────────────┐         ┌──────────────┐
 │ POST /   │           │ GET /results │         │ GET /results/ │
 │process   │           │   (list)     │         │     {id}      │
 └────┬─────┘           └──────┬───────┘         └──────┬───────┘
-│                        │                        │
-▼                        ▼                        ▼
+     │                        │                        │
+     ▼                        ▼                        ▼
 ┌──────────┐           ┌──────────────┐         ┌──────────────┐
 │ Lambda   │           │ Lambda       │         │ Lambda       │
 │Process   │           │ListResults   │         │GetResult     │
 └────┬─────┘           └──────┬───────┘         └──────┬───────┘
-│                        │                        │
-└──────────────┬─────────┴──────────┬────────────┘
-▼                    ▼
-┌──────────────────────────────┐
-│     DynamoDB Table           │
-│  TextProcessingResults       │
-└──────────────────────────────┘
+     │                        │                        │
+     └──────────────┬─────────┴──────────┬────────────┘
+                    ▼                    ▼
+                ┌──────────────────────────────┐
+                │     DynamoDB Table           │
+                │  TextProcessingResults       │
+                └──────────────────────────────┘
+```
 
----
 
 ## Sequence Diagram (POST → DynamoDB)
 
+```
 Client
-│
-│ POST /
-▼
+  │
+  │ POST /
+  ▼
 API Gateway
-│
-│ invokes Lambda
-▼
+  │
+  │ invokes Lambda
+  ▼
 ProcessTextFunction
-│
-│ put_item()
-▼
+  │
+  │ put_item()
+  ▼
 DynamoDB
-│
-│ success
-▼
+  │
+  │ success
+  ▼
 ProcessTextFunction
-│
-│ returns JSON
-▼
+  │
+  │ returns JSON
+  ▼
 Client
-
----
+```
 
 # 🌐 Base URL
-
 https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com
-
 ---
+
 
 # 📚 API Documentation
 
@@ -100,12 +124,17 @@ https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com
 
 Process text and store the result.
 
-### Request
+### Request Body
 
 ```json
 {
   "text": "hello world"
 }
+```
+
+### Example Response
+
+```json
 {
   "id": "uuid",
   "original": "hello world",
@@ -113,10 +142,25 @@ Process text and store the result.
   "length": 11,
   "timestamp": 1771283745
 }
-🟢 GET /results
+```
+
+### Example cURL
+
+```bash
+curl -X POST https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/ \
+  -H "Content-Type: application/json" \
+  -d '{"text": "hello world"}'
+```
+
+---
+
+## 🟢 GET `/results`
+
 List all stored results.
 
-Response
+### Example Response
+
+```json
 [
   {
     "id": "uuid",
@@ -126,12 +170,29 @@ Response
     "timestamp": 1771283745
   }
 ]
-🟡 GET /results/{id}
+```
+
+### Example cURL
+
+```bash
+curl https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results
+```
+
+---
+
+## 🟡 GET `/results/{id}`
+
 Retrieve a single result by ID.
 
-Example
+### Example Request
+
+```
 GET /results/f5e565d8-bc1f-4911-a810-e1c3e06d8c98
-Response
+```
+
+### Example Response
+
+```json
 {
   "id": "f5e565d8-bc1f-4911-a810-e1c3e06d8c98",
   "original": "hello",
@@ -139,108 +200,141 @@ Response
   "length": 5,
   "timestamp": 1771283745
 }
+```
 
-🔴 DELETE /results/{id}
+### Example cURL
+
+```bash
+curl https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results/<id>
+```
+
+---
+
+## 🔴 DELETE `/results/{id}`
+
 Delete a result by ID.
 
-Example
+### Example Request
 
+```
 DELETE /results/f5e565d8-bc1f-4911-a810-e1c3e06d8c98
+```
 
-Response
+### Example Response
 
+```json
 { "message": "Item deleted successfully" }
+```
 
-🛡 CORS
+### Example cURL
+
+```bash
+curl -X DELETE https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results/<id>
+```
+
+---
+
+## 🛡 CORS
+
 All responses include:
 
+```json
 {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type"
 }
+```
 
-🗄 DynamoDB Schema
+---
+
+## 🗄 DynamoDB Schema
+
+```
 Table: TextProcessingResults
 
-Attribute	Type
-id	String (PK)
-original	String
-uppercase	String
-length	Number
-timestamp	Number
+Attribute   | Type
+------------|--------
+id          | String (PK)
+original    | String
+uppercase   | String
+length      | Number
+timestamp   | Number
+```
 
-📊 Logging Strategy
+---
+
+
+## 📊 Logging Strategy
+
 Every Lambda uses structured JSON logs:
 
+```json
 {
   "level": "INFO",
   "message": "Item stored successfully",
   "requestId": "abc-123",
   "details": { "id": "uuid" }
 }
+```
 
 This makes CloudWatch logs:
 
-searchable
+- searchable  
+- filterable  
+- machine‑readable  
+- consistent across all Lambdas  
 
-filterable
+---
 
-machine‑readable
+## 🧪 Local Testing
 
-consistent across all Lambdas
+### POST
 
-🛠 Deployment
-From each Lambda folder:
-
-zip function.zip lambda_function.py
-aws lambda update-function-code \
-  --function-name <LambdaName> \
-  --zip-file fileb://function.zip
-
-🧪 Local Testing
-POST
-
+```bash
 curl -X POST https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/ \
   -H "Content-Type: application/json" \
   -d '{"text": "hello"}'
+```
 
-GET all
+### GET all
 
+```bash
 curl https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results
+```
 
-GET one
+### GET one
 
+```bash
 curl https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results/<id>
+```
 
-DELETE
+### DELETE
 
+```bash
 curl -X DELETE https://3ki380u3fc.execute-api.eu-north-1.amazonaws.com/results/<id>
+```
 
-🚧 Future Improvements
-Add authentication (Cognito / JWT)
+## 🚧 Future Improvements
 
-Add pagination to /results
+Planned enhancements for the next iteration:
 
-Add update endpoint (PATCH)
+- Add authentication (Cognito or JWT-based access control)
+- Add pagination support to `/results`
+- Add an update endpoint (PATCH)
+- Build a frontend UI (React or Svelte)
+- Add full infrastructure-as-code deployment (CloudFormation or CDK)
 
-Add frontend UI (React or Svelte)
+---
 
-Add CloudFormation / CDK deployment
+## 🎉 Final Notes
 
-🎉 Final Notes
 This project demonstrates:
 
-clean serverless architecture
+- Clean serverless architecture
+- Modular Lambda design
+- Consistent structured logging
+- DynamoDB best practices
+- Production‑grade error handling
 
-modular Lambda design
-
-consistent logging
-
-DynamoDB best practices
-
-production‑grade error handling
-
-Perfect for showcasing DevOps + backend engineering skills.
-
-
+A solid showcase of DevOps and backend engineering skills.
