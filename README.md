@@ -35,17 +35,16 @@ Designed with clean architecture, structured logging, and production‑grade err
 # 📸 Screenshots
 
 ### 01 — API Gateway Routes
-![API Gateway Routes](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/01-api-gateway-routes.png)
+![API Gateway Routes](screenshots/01-api-gateway-routes.png)
 
 ### 02 — DynamoDB Table
-![DynamoDB Table](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/02-dynamodb-table.png)
+![DynamoDB Table](screenshots/02-dynamodb-table.png)
 
 ### 03 — CloudWatch Logs
-![CloudWatch Logs](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/03-cloudwatch-logs.png)
+![CloudWatch Logs](screenshots/03-cloudwatch-logs.png)
 
 ### 04 — cURL Tests (POST → GET All → GET One → DELETE)
-![cURL Tests](https://raw.githubusercontent.com/Franklindot04/lambda-text-processor/main/screenshots/04-curl-tests.png)
-
+![cURL Tests](screenshots/04-curl-tests.png)
 
 ---
 
