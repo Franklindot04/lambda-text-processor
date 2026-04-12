@@ -7,7 +7,7 @@
 ![IaC Ready](https://img.shields.io/badge/Infrastructure-CDK/Terraform_ready-green)
 ![Status](https://img.shields.io/badge/Status-Production_Ready-brightgreen)
 
-A fully serverless CRUD API built using **AWS Lambda**, **API Gateway**, and **DynamoDB**.  
+A fully serverless CRUD API built using **AWS Lambda**, **API Gateway** and **DynamoDB**.  
 Designed with clean architecture, structured logging and production‑grade error handling.
 
 ---
