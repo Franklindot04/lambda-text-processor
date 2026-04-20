@@ -317,6 +317,9 @@ Planned enhancements for the next iteration:
 - Add an update endpoint (PATCH)
 - Build a frontend UI (React or Svelte)
 - Add full infrastructure-as-code deployment (CloudFormation or CDK)
+- Add automated load testing to validate cold-start and p95 latency under burst traffic.
+- Consolidate initialization logic across all Lambda functions to reduce cold-start overhead and improve warm-start performance.
+
 
 ---
 
