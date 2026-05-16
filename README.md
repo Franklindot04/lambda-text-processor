@@ -333,4 +333,3 @@ This project demonstrates:
 - DynamoDB best practices
 - Production‑grade error handling
 
-A solid showcase of DevOps and backend engineering skills.
